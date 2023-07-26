@@ -1,0 +1,24 @@
+/* Set the height of the root element to 100% */
+html, body, #root {
+    height: 100%;
+  }
+  
+  /* Use flexbox to create a column layout */
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Set the main content area to grow and take up the remaining space */
+  #root {
+    flex: 1;
+  }
+  
+  /* Style the footer */
+  footer {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 10px;
+  }
+  
