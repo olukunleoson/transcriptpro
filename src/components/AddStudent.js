@@ -33,7 +33,7 @@ const AddStudent = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4" style={{ color: 'white' }}>
       <div className="row">
         <div className="col-md-8 offset-md-2">
           <h2>Add Student</h2>
@@ -46,6 +46,17 @@ const AddStudent = () => {
                 id="name"
                 name="name"
                 value={formData.name}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="department">Faculty</label>
+              <input
+                type="text"
+                className="form-control"
+                id="department"
+                name="department"
+                value={formData.department}
                 onChange={handleInputChange}
               />
             </div>
@@ -72,7 +83,7 @@ const AddStudent = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="gpa">GPA</label>
+              <label htmlFor="gpa">CGPA</label>
               <input
                 type="text"
                 className="form-control"

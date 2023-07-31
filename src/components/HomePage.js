@@ -1,35 +1,47 @@
 import React, { useState } from 'react';
 import Footer from './Footer';
 import SearchSection from './SearchSection';
+import TranscriptRequestModal from './TranscriptRequestModal';
 
 const HomePage = () => {
-  // State to store the search query
   const [searchQuery, setSearchQuery] = useState('');
-  // State to store the student information (this can be replaced with actual data later)
   const [studentInfo, setStudentInfo] = useState(null);
+  const [showModal, setShowModal] = useState(false); // State to control the pop-up visibility
 
-  // Function to handle the search
   const handleSearch = () => {
+    console.log("searchQuery:", searchQuery);
+    console.log("studentInfo:", studentInfo);
     // Implement the logic to search for students based on the searchQuery
     // For now, we'll use a placeholder student info
     setStudentInfo({
       name: 'John Doe',
       id: '12345',
+      faculty: 'Science and Engineering',
       department: 'Computer Science',
       level: '400',
-      gpa: '4.0',
     });
+
+    // Show the pop-up
+    setShowModal(true);
+  };
+
+  const handleApplyForTranscript = () => {
+    // Implement the logic to handle the student's transcript request
+    // For now, we'll just log a message to the console
+    console.log('Transcript requested for student:', studentInfo.name);
+
+    // Close the pop-up
+    setShowModal(false);
   };
 
   return (
     <div>
-      <div className="container mt-4">
+      <div className="container mt-4" style={{ color: 'white' }}>
         <div className="row">
           <div className="col-md-8 offset-md-2">
             <h1>Welcome to TranscriptPro</h1>
-            <p>Search for students and manage their transcripts with ease.</p>
+            <p>Search for students and manage their records with ease.</p>
 
-            {/* Search section */}
             <SearchSection
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -39,6 +51,15 @@ const HomePage = () => {
         </div>
       </div>
       <Footer />
+
+      {/* Pop-up for transcript request */}
+      {showModal && (
+        <TranscriptRequestModal
+          studentInfo={studentInfo}
+          onClose={() => setShowModal(false)}
+          onApply={handleApplyForTranscript}
+        />
+      )}
     </div>
   );
 };

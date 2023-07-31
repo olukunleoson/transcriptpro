@@ -23,7 +23,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4" style={{ color: 'white' }}>
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <h2 className="mb-4">Register</h2>

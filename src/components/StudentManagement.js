@@ -6,13 +6,20 @@ const StudentManagement = () => {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    // Fetch student data from API or your data source
-    axios.get('/api/students')
+    // Get the access token from localStorage
+    const token = localStorage.getItem('authToken');
+
+    // Set the Authorization header with the access token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    // Fetch student data using the authenticated API request
+    axios
+      .get('http://127.0.0.1:8000/api/students/')
       .then((response) => {
         setStudents(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching student data:', error);
+        console.error('Error fetching students:', error);
       });
   }, []);
 
@@ -20,7 +27,7 @@ const StudentManagement = () => {
     <div className="container mt-4">
       <div className="row">
         <div className="col-md-8 offset-md-2">
-          <h2>Student Management</h2>
+          <h2>Student List</h2>
           <StudentTable students={students} setStudents={setStudents} />
         </div>
       </div>

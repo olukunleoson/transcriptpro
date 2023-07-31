@@ -12,7 +12,7 @@ const TranscriptGeneration = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4" style={{ color: 'white' }}>
       <div className="row">
         <div className="col-md-8 offset-md-2">
           <h2>Generate Transcript</h2>

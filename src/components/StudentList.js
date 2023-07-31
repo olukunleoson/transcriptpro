@@ -2,22 +2,29 @@ import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import ConfirmationModal from './ConfirmationModal';
-
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const studentsPerPage = 10;
+  const [showModal, setShowModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   useEffect(() => {
-    // Fetch student data from API or your data source
-    axios.get('/api/students')
+    // Get the access token from localStorage
+    const token = localStorage.getItem('authToken');
+
+    // Set the Authorization header with the access token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    // Fetch student data using the authenticated API request
+    axios
+      .get('http://127.0.0.1:8000/api/students/')
       .then((response) => {
         setStudents(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching student data:', error);
+        console.error('Error fetching students:', error);
       });
   }, []);
 
@@ -29,38 +36,42 @@ const StudentList = () => {
   const offset = currentPage * studentsPerPage;
   const paginatedStudents = students.slice(offset, offset + studentsPerPage);
 
-  // State for showing the confirmation modal
-  const [showModal, setShowModal] = useState(false);
-  // State for the student to be deleted
-  const [studentToDelete, setStudentToDelete] = useState(null);
-
-  // Function to handle delete student
-  const handleDelete = () => {
-    // Implement the logic to delete the student from the backend
-    // After successful deletion, you can fetch the updated student list
-    // and update the 'students' state to re-render the student list
-    console.log('Student deleted:', studentToDelete);
-    setShowModal(false);
-  };
-
-  // Function to show the confirmation modal
-  const showConfirmationModal = (student) => {
-    setStudentToDelete(student);
+  const handleDelete = (studentId) => {
+    setSelectedStudent(studentId);
     setShowModal(true);
   };
 
+  const confirmDelete = () => {
+    axios
+      .delete(`http://127.0.0.1:8000/api/students/${selectedStudent}`)
+      .then((response) => {
+        setSelectedStudent(null);
+        axios
+          .get('http://127.0.0.1:8000/api/students/')
+          .then((response) => {
+            setStudents(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching student data:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error deleting student:', error);
+      });
+  };
+
   return (
-    <div className="container mt-4">
+    <div className="container mt-4" style={{ color: 'white' }}>
       <div className="row">
         <div className="col-md-8 offset-md-2">
-          <h2>Student List</h2>
-          <Link to="/add-student" className="btn btn-primary mb-3">
-            Add Student
+          <h2>Manage Student</h2>
+          <Link to="/add-student" className="btn btn-secondary mb-3">
+            Add
           </Link>
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Matric number</th>
                 <th>Name</th>
                 <th>Department</th>
                 <th>Level</th>
@@ -87,7 +98,7 @@ const StudentList = () => {
                     {/* Delete button */}
                     <button
                       className="btn btn-danger btn-sm"
-                      onClick={() => showConfirmationModal(student)}
+                      onClick={() => handleDelete(student.id)}
                     >
                       Delete
                     </button>

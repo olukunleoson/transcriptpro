@@ -1,61 +1,71 @@
-// src/components/Login.js
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const Login = () => {
-  // State to store form input values
+
+const Login = ({ onLogin }) => { 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement login logic here
-    console.log(formData);
+  
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/token/', formData);
+      Cookies.set('authToken', response.data.access, { expires: 1 });
+      onLogin({
+        token: response.data.access,
+        username: formData.username,
+      });
+      console.log('Login successful!');
+  
+      // Redirect to the homepage after successful login
+      navigate('/');
+    } catch (error) {
+      console.error('Login error:', error);
+      console.error('Login error data:', error.response.data);
+    }
   };
 
-  // Function to handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="container mt-4">
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
-          <h2 className="mb-4">Login</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-          </form>
+    <div className="container mt-4" style={{ color: 'white' }}>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            className="form-control"
+          />
         </div>
-      </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="form-control"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Login
+        </button>
+        <p className="mt-3">
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
+      </form>
     </div>
   );
 };

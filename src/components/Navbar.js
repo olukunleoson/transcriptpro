@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ isAuthenticated, username, onLogout }) => {
+  const handleLogout = () => {
+    // Logic to handle logout
+    onLogout();
+  };
+
   return (
     <nav className="navbar navbar-expand-md navbar-light bg-light">
       <div className="container">
@@ -15,11 +20,13 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/students">
-                Student List
-              </Link>
-            </li>
+            {isAuthenticated && ( // Show Student List link only when authenticated
+              <li className="nav-item">
+                <Link className="nav-link" to="/students">
+                  Manage Student
+                </Link>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav ml-auto">
             <li className="nav-item dropdown">
@@ -31,15 +38,30 @@ const Navbar = () => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Account
+                {isAuthenticated ? `Welcome ${username}` : 'Account'}
               </button>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link className="dropdown-item" to="/login">
-                  Login
-                </Link>
-                <Link className="dropdown-item" to="/register">
-                  Register
-                </Link>
+                {isAuthenticated && ( // Show Dashboard link when authenticated
+                  <>
+                    <Link className="dropdown-item" to="/dashboard">
+                      Dashboard
+                    </Link>
+                    <Link className="dropdown-item" to="/transcript-request">
+                      Transcript Request
+                    </Link>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  </>
+                )}
+                {!isAuthenticated && (
+                  <>
+                    <Link className="dropdown-item" to="/login">
+                      Login
+                    </Link>
+                    
+                  </>
+                )}
               </div>
             </li>
           </ul>

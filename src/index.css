@@ -1,24 +1,48 @@
 /* Set the height of the root element to 100% */
 html, body, #root {
-    height: 100%;
-  }
-  
-  /* Use flexbox to create a column layout */
-  body {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Set the main content area to grow and take up the remaining space */
-  #root {
-    flex: 1;
-  }
-  
-  /* Style the footer */
-  footer {
-    background-color: #007BFF;
-    color: white;
-    text-align: center;
-    padding: 10px;
-  }
-  
+  height: 100%;
+}
+
+/* Use flexbox to create a column layout */
+body {
+  display: flex;
+  flex-direction: column;
+  background-image: url('../public/bgtranspro2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Set the main content area to grow and take up the remaining space */
+#root {
+  flex: 1;
+}
+
+/* Add custom CSS to style the sidebar */
+.list-group {
+  margin-top: 20px;
+}
+
+.list-group-item {
+  background-color: #e9eff5; /* Set the background color */
+  border: none; /* Remove the default border */
+}
+
+.list-group-item a {
+  color: #333333ee; /* Set the link color */
+  text-decoration: none; /* Remove the underline */
+  display: block; /* Make the link fill the entire list item */
+  padding: 10px; /* Add padding for spacing */
+}
+
+.list-group-item a:hover {
+  background-color: #e9ecef; /* Set the background color on hover */
+}
+
+/* Style the footer */
+footer {
+  background-color: #14171d;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  height: fit-content;
+}
